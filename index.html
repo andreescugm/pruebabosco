@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Javier Bosco Properties — Activos Singulares</title>
+<meta name="description" content="Intermediación en operaciones inmobiliarias off-market.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@100;200;300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold: #c5b358; /* Dorado champagne más elegante */
+  --gold-dim: #8e7f42;
+  --gold-25: rgba(197, 179, 88, 0.25);
+  --bg: #030303;
+  --bg-card: #080808;
+  --border: rgba(255, 255, 255, 0.08);
+  --white: #ffffff;
+  --white-dim: rgba(255,255,255,0.6);
+  --serif: 'Playfair Display', serif;
+  --body: 'Cormorant Garamond', serif;
+  --ui: 'Inter', sans-serif;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { scroll-behavior: smooth; background: var(--bg); }
+body { 
+  background: var(--bg); 
+  color: var(--white); 
+  font-family: var(--body); 
+  overflow-x: hidden; 
+  cursor: none; 
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── CURSOR ─── */
+#jb-cursor { position: fixed; pointer-events: none; z-index: 9999; top: 0; left: 0; }
+#jb-cursor-dot { 
+  width: 6px; height: 6px; border-radius: 50%; 
+  background: var(--gold); transform: translate(-50%, -50%); 
+  transition: width .4s var(--ease-out), height .4s var(--ease-out), background .4s;
+}
+#jb-cursor-dot.expand { width: 40px; height: 40px; background: transparent; border: 1px solid var(--gold); }
+
+/* ─── NAV ─── */
+#jb-nav { 
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; 
+  padding: 30px 6vw; display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.5s var(--ease-out);
+}
+#jb-nav.scrolled { padding: 15px 6vw; background: rgba(3,3,3,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.nav-logo { font-family: var(--serif); font-size: 14px; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: var(--white); }
+.nav-links { display: flex; gap: 40px; }
+.nav-link { 
+  font-family: var(--ui); font-size: 9px; letter-spacing: 0.3em; 
+  text-transform: uppercase; text-decoration: none; color: var(--white-dim); 
+  transition: color 0.3s;
+}
+.nav-link:hover { color: var(--gold); }
+
+/* ─── HERO ─── */
+#jb-hero { 
+  height: 100vh; display: flex; align-items: center; 
+  position: relative; overflow: hidden; padding: 0 6vw;
+}
+#smoke-canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.8; }
+.hero-content { position: relative; z-index: 2; max-width: 900px; }
+.hero-h1 { 
+  font-family: var(--serif); font-size: clamp(50px, 8vw, 110px); 
+  font-weight: 300; line-height: 0.9; margin-bottom: 40px; 
+}
+.hero-h1 em { font-style: italic; color: var(--gold); font-family: var(--body); }
+.hero-sub { 
+  font-family: var(--ui); font-size: 10px; letter-spacing: 0.4em; 
+  text-transform: uppercase; color: var(--white-dim); max-width: 400px; line-height: 2;
+}
+
+/* ─── PROPIEDADES (ESTILO FINE-ART) ─── */
+.jb-section { padding: 15vh 6vw; }
+.prop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2px; background: var(--border); }
+.prop-card { background: var(--bg); position: relative; overflow: hidden; cursor: none; }
+.prop-img-wrap { aspect-ratio: 4/5; overflow: hidden; background: #111; }
+.prop-img-real { 
+  width: 100%; height: 100%; object-fit: cover; 
+  filter: grayscale(1) brightness(0.7) sepia(0.1); /* Look de referencia */
+  transition: all 1.5s var(--ease-out);
+}
+.prop-card:hover .prop-img-real { filter: grayscale(0) brightness(1) sepia(0); transform: scale(1.05); }
+.prop-info { padding: 30px 0; }
+.prop-badge { font-family: var(--ui); font-size: 8px; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; display: block; }
+.prop-name { font-family: var(--serif); font-size: 22px; font-weight: 300; margin-bottom: 10px; }
+
+/* ─── BOTONES ─── */
+.btn-luxury {
+  display: inline-flex; padding: 18px 45px; border: 1px solid var(--gold-25);
+  font-family: var(--ui); font-size: 9px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--gold); text-decoration: none;
+  transition: all 0.5s var(--ease-out); position: relative; overflow: hidden;
+}
+.btn-luxury:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+/* ─── REVEAL ─── */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s var(--ease-out); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+</style>
+</head>
+<body>
+
+<div id="jb-cursor"><div id="jb-cursor-dot"></div></div>
+
+<nav id="jb-nav">
+  <a href="#" class="nav-logo">Javier Bosco</a>
+  <div class="nav-links">
+    <a href="#activos" class="nav-link">Activos</a>
+    <a href="#firma" class="nav-link">La Firma</a>
+    <a href="#contacto" class="nav-link">Contacto</a>
+  </div>
+</nav>
+
+<section id="jb-hero">
+  <canvas id="smoke-canvas"></canvas>
+  <div class="hero-content">
+    <h1 class="hero-h1">Inversión<br><em>Silenciosa.</em></h1>
+    <p class="hero-sub">Activos singulares fuera de mercado para capital institucional y privado.</p>
+    <div style="margin-top: 50px;">
+      <a href="#activos" class="btn-luxury">Explorar Cartera</a>
+    </div>
+  </div>
+</section>
+
+<section id="activos" class="jb-section">
+  <div class="reveal">
+    <span class="prop-badge">Selección Curada</span>
+    <h2 class="hero-h1" style="font-size: 50px; margin-bottom: 60px;">Activos <em>Singulares</em></h2>
+  </div>
+  
+  <div class="prop-grid">
+    <div class="prop-card reveal">
+      <div class="prop-img-wrap">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800" class="prop-img-real" alt="Edificio Madrid">
+      </div>
+      <div class="prop-info">
+        <span class="prop-badge">Madrid · Recoletos</span>
+        <h3 class="prop-name">Edificio Residencial Premium</h3>
+        <p class="prop-sub" style="color: var(--white-dim); font-size: 14px;">Operación Core+ con alta rentabilidad.</p>
+      </div>
+    </div>
+    
+    <div class="prop-card reveal" style="transition-delay: 0.2s;">
+      <div class="prop-img-wrap">
+        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800" class="prop-img-real" alt="Hotel Marbella">
+      </div>
+      <div class="prop-info">
+        <span class="prop-badge">Costa del Sol</span>
+        <h3 class="prop-name">Hotel Boutique 5* GL</h3>
+        <p class="prop-sub" style="color: var(--white-dim); font-size: 14px;">Primera línea de playa, Off-market.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ─── CURSOR DINÁMICO ───
+const dot = document.getElementById('jb-cursor-dot');
+document.addEventListener('mousemove', e => {
+  document.getElementById('jb-cursor').style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+});
+
+document.querySelectorAll('a, .prop-card').forEach(el => {
+  el.addEventListener('mouseenter', () => dot.classList.add('expand'));
+  el.addEventListener('mouseleave', () => dot.classList.remove('expand'));
+});
+
+// ─── NAV SCROLL ───
+window.addEventListener('scroll', () => {
+  document.getElementById('jb-nav').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ─── SMOKE SHADER REFINADO (Más etéreo) ───
+const canvas = document.getElementById('smoke-canvas');
+const gl = canvas.getContext('webgl');
+
+function resize() {
+  canvas.width = window.innerWidth * window.devicePixelRatio;
+  canvas.height = window.innerHeight * window.devicePixelRatio;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+}
+window.addEventListener('resize', resize);
+resize();
+
+const vs = `attribute vec2 p; void main(){ gl_Position=vec4(p,0,1); }`;
+const fs = `
+precision mediump float;
+uniform float t; uniform vec2 r;
+float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+float noise(vec2 p){
+  vec2 i=floor(p), f=fract(p), u=f*f*(3.-2.*f);
+  return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+}
+void main(){
+  vec2 uv = gl_FragCoord.xy/r;
+  float n = noise(uv * 3.0 + t * 0.05);
+  float alpha = smoothstep(0.4, 0.8, n) * 0.15; // Muy sutil
+  gl_FragColor = vec4(0.77, 0.70, 0.35, alpha); // Tono champagne
+}`;
+
+function createShader(gl, type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src);
+  gl.compileShader(s);
+  return s;
+}
+
+const prog = gl.createProgram();
+gl.attachShader(prog, createShader(gl, gl.VERTEX_SHADER, vs));
+gl.attachShader(prog, createShader(gl, gl.FRAGMENT_SHADER, fs));
+gl.linkProgram(prog);
+gl.useProgram(prog);
+
+const buf = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+const pLoc = gl.getAttribLocation(prog, 'p');
+gl.enableVertexAttribArray(pLoc);
+gl.vertexAttribPointer(pLoc, 2, gl.FLOAT, false, 0, 0);
+
+const tLoc = gl.getUniformLocation(prog, 't');
+const rLoc = gl.getUniformLocation(prog, 'r');
+
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+function render(now) {
+  gl.uniform1f(tLoc, now * 0.001);
+  gl.uniform2f(rLoc, canvas.width, canvas.height);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// ─── REVEAL ON SCROLL ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
